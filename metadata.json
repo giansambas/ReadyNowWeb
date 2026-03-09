@@ -1,0 +1,5 @@
+{
+  "name": "ReadyNow",
+  "description": "An AI-powered disaster readiness support system for Quezon City, providing evacuation information, weather updates, and personalized preparedness guidance.",
+  "requestFramePermissions": ["geolocation"]
+}
