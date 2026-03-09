@@ -513,7 +513,7 @@ const MapInfo = ({ district, barangay }: { district: string, barangay: string })
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         <div className="lg:col-span-2 space-y-8">
-          <div className="bg-white rounded-3xl overflow-hidden border border-zinc-100 shadow-sm h-[500px]">
+          <div className="bg-white rounded-3xl overflow-hidden border border-zinc-100 shadow-sm h-[350px] md:h-[500px]">
             <iframe 
               key={mapQuery}
               className="w-full h-full border-none"
@@ -786,7 +786,7 @@ const HomeLanding = ({ onStart }: { onStart: () => void }) => (
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
         >
-          <h2 className="text-6xl md:text-8xl font-bold tracking-tight text-zinc-900 leading-[0.9]">
+          <h2 className="text-5xl sm:text-6xl md:text-8xl font-bold tracking-tight text-zinc-900 leading-[0.9]">
             ReadyNow<span className="text-red-700">.</span>
           </h2>
           <p className="text-xl md:text-2xl text-zinc-500 max-w-2xl mx-auto mt-6">
