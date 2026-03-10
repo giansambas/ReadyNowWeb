@@ -5,9 +5,13 @@ export default async function handler(req, res) {
   // GET reports
   if (req.method === "GET") {
 
-    const reports = await kv.get("reports");
+    const keys = await kv.keys("report:*");
 
-    return res.json(reports || []);
+    const reports = await Promise.all(
+      keys.map((key) => kv.get(key))
+    );
+
+    return res.json(reports.filter(Boolean));
   }
 
   // POST report
@@ -16,32 +20,19 @@ export default async function handler(req, res) {
     const username = req.cookies?.username;
 
     if (!username) {
-      return res.status(401).json({
-        error: "Unauthorized"
-      });
+      return res.status(401).json({ error: "Unauthorized" });
     }
 
     const { location, disaster, description } = req.body;
 
     if (!location || !disaster || !description) {
-      return res.status(400).json({
-        error: "Missing fields"
-      });
+      return res.status(400).json({ error: "Missing fields" });
     }
 
-    type Report = {
-  id: number
-  username: string
-  location: string
-  disaster: string
-  description: string
-  time: string
-}
+    const id = Date.now();
 
-const reports = (await kv.get<Report[]>("reports")) || [];
-
-    const newReport = {
-      id: Date.now(),
+    const report = {
+      id,
       username,
       location,
       disaster,
@@ -49,13 +40,12 @@ const reports = (await kv.get<Report[]>("reports")) || [];
       time: new Date().toISOString()
     };
 
-    reports.unshift(newReport);
-
-    await kv.set("reports", reports);
+    await kv.set(`report:${id}`, report, {
+      ex: 86400   // 24 hours
+    });
 
     res.json({
       status: "success"
     });
   }
-
 }
