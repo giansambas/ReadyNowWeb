@@ -1,5 +1,4 @@
 import express from "express";
-import { createServer as createViteServer } from "vite";
 import Database from "better-sqlite3";
 import path from "path";
 import bcrypt from "bcryptjs";
@@ -8,16 +7,19 @@ import cookieParser from "cookie-parser";
 import cors from "cors";
 
 const app = express();
+
 const PORT = Number(process.env.PORT) || 3000;
-
-const dbPath = process.env.NODE_ENV === "production"
-  ? "/tmp/data.db"
-  : "data.db";
-
-const db = new Database(dbPath);
 const JWT_SECRET = process.env.JWT_SECRET || "readynow-secret-key-12345";
 
-// Allow frontend (Vercel) to access backend (Render)
+// Render requires writable location
+const dbPath =
+  process.env.NODE_ENV === "production"
+    ? "/tmp/data.db"
+    : "data.db";
+
+const db = new Database(dbPath);
+
+// Middleware
 app.use(cors({
   origin: true,
   credentials: true
@@ -28,45 +30,49 @@ app.use(cookieParser());
 
 // Initialize Database
 db.exec(`
-  CREATE TABLE IF NOT EXISTS users (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    username TEXT UNIQUE,
-    password TEXT,
-    created_at DATETIME DEFAULT CURRENT_TIMESTAMP
-  );
+CREATE TABLE IF NOT EXISTS users (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  username TEXT UNIQUE,
+  password TEXT,
+  created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+);
 
-  CREATE TABLE IF NOT EXISTS reports (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    user_id INTEGER,
-    username TEXT,
-    location TEXT,
-    disaster TEXT,
-    description TEXT,
-    time DATETIME DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY(user_id) REFERENCES users(id)
-  );
+CREATE TABLE IF NOT EXISTS reports (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  user_id INTEGER,
+  username TEXT,
+  location TEXT,
+  disaster TEXT,
+  description TEXT,
+  time DATETIME DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY(user_id) REFERENCES users(id)
+);
 `);
 
 // Auth Middleware
 const authenticate = (req: any, res: any, next: any) => {
   const token = req.cookies.token;
-  if (!token) return res.status(401).json({ error: "Unauthorized" });
+
+  if (!token) {
+    return res.status(401).json({ error: "Unauthorized" });
+  }
 
   try {
     const decoded = jwt.verify(token, JWT_SECRET);
     req.user = decoded;
     next();
-  } catch (err) {
+  } catch {
     res.status(401).json({ error: "Invalid token" });
   }
 };
 
-// Auth Routes
+// Register
 app.post("/api/auth/register", async (req, res) => {
   const { username, password } = req.body;
 
-  if (!username || !password)
+  if (!username || !password) {
     return res.status(400).json({ error: "Missing fields" });
+  }
 
   try {
     const hashedPassword = await bcrypt.hash(password, 10);
@@ -97,10 +103,12 @@ app.post("/api/auth/register", async (req, res) => {
     if (err.message.includes("UNIQUE constraint failed")) {
       return res.status(400).json({ error: "Username already exists" });
     }
+
     res.status(500).json({ error: "Server error" });
   }
 });
 
+// Login
 app.post("/api/auth/login", async (req, res) => {
   const { username, password } = req.body;
 
@@ -131,10 +139,13 @@ app.post("/api/auth/login", async (req, res) => {
   });
 });
 
+// Get current user
 app.get("/api/auth/me", (req, res) => {
   const token = req.cookies.token;
 
-  if (!token) return res.json({ user: null });
+  if (!token) {
+    return res.json({ user: null });
+  }
 
   try {
     const decoded = jwt.verify(token, JWT_SECRET);
@@ -144,12 +155,13 @@ app.get("/api/auth/me", (req, res) => {
   }
 });
 
+// Logout
 app.post("/api/auth/logout", (req, res) => {
   res.clearCookie("token");
   res.json({ status: "success" });
 });
 
-// Report Routes
+// Get reports
 app.get("/api/report", (req, res) => {
   const reports = db
     .prepare("SELECT * FROM reports ORDER BY time DESC")
@@ -158,6 +170,7 @@ app.get("/api/report", (req, res) => {
   res.json(reports);
 });
 
+// Submit report
 app.post("/api/report", authenticate, (req: any, res) => {
   const { location, disaster, description } = req.body;
   const { id, username } = req.user;
@@ -180,26 +193,7 @@ app.post("/api/report", authenticate, (req: any, res) => {
   });
 });
 
-// Development mode (Vite middleware)
-const isProduction = process.env.NODE_ENV === "production";
-
-if (!isProduction) {
-  // Local development with Vite
-  createViteServer({
-    server: { middlewareMode: true },
-    appType: "spa",
-  }).then((vite) => {
-    app.use(vite.middlewares);
-
-    app.listen(PORT, "0.0.0.0", () => {
-      console.log(`Dev server running on http://localhost:${PORT}`);
-    });
-  });
-} else {
-  // Production server (Render)
-  app.listen(PORT, "0.0.0.0", () => {
-    console.log(`Production API running on port ${PORT}`);
-  });
-}
-
-export default app;
+// Start server
+app.listen(PORT, "0.0.0.0", () => {
+  console.log(`Server running on port ${PORT}`);
+});
