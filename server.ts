@@ -8,7 +8,7 @@ import cookieParser from "cookie-parser";
 import cors from "cors";
 
 const app = express();
-const PORT = process.env.PORT || 3000;
+const PORT = Number(process.env.PORT) || 3000;
 
 const db = new Database("data.db");
 const JWT_SECRET = process.env.JWT_SECRET || "readynow-secret-key-12345";
