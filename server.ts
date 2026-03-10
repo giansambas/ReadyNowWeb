@@ -10,7 +10,11 @@ import cors from "cors";
 const app = express();
 const PORT = Number(process.env.PORT) || 3000;
 
-const db = new Database("data.db");
+const dbPath = process.env.NODE_ENV === "production"
+  ? "/tmp/data.db"
+  : "data.db";
+
+const db = new Database(dbPath);
 const JWT_SECRET = process.env.JWT_SECRET || "readynow-secret-key-12345";
 
 // Allow frontend (Vercel) to access backend (Render)
