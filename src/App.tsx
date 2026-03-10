@@ -92,8 +92,8 @@ const Sidebar = ({ isOpen, toggle, activeTab, setActiveTab }: {
         animate={{ x: (isOpen || isDesktop) ? 0 : -300 }}
         className="fixed top-0 left-0 h-full w-64 bg-zinc-900 text-white z-50 transition-transform duration-300 ease-in-out"
       >
-        <div className="p-6 flex items-center justify-between">
-          <h1 className="text-2xl font-bold tracking-tighter text-red-700">ReadyNow</h1>
+        <div className="p-4 md:p-6 flex items-center justify-between">
+          <h1 className="text-xl md:text-2xl font-bold tracking-tighter text-red-700">ReadyNow</h1>
           <button onClick={toggle} className="lg:hidden text-zinc-400 hover:text-white">
             <X size={24} />
           </button>
@@ -135,7 +135,7 @@ const Header = ({ toggleSidebar, onBack, showBack, activeTab, user, onLogin, onL
   onLogin: () => void,
   onLogout: () => void
 }) => (
-  <header className="sticky top-0 z-30 w-full bg-white/80 backdrop-blur-md border-b border-zinc-100 px-6 py-4">
+  <header className="sticky top-0 z-30 w-full bg-white/80 backdrop-blur-md border-b border-zinc-100 px-4 md:px-6 py-3 md:py-4">
     <div className="max-w-7xl mx-auto flex items-center justify-between">
       <div className="flex items-center gap-4">
         {activeTab !== 'home' && (
@@ -224,14 +224,14 @@ const AuthModal = ({ isOpen, onClose, onAuthSuccess }: { isOpen: boolean, onClos
       <motion.div 
         initial={{ opacity: 0, scale: 0.95 }}
         animate={{ opacity: 1, scale: 1 }}
-        className="bg-white w-full max-w-md rounded-3xl p-8 shadow-2xl relative"
+        className="bg-white w-full max-w-md rounded-3xl p-6 md:p-8 shadow-2xl relative"
       >
-        <button onClick={onClose} className="absolute top-6 right-6 text-zinc-400 hover:text-zinc-900">
+        <button onClick={onClose} className="absolute top-4 right-4 md:top-6 md:right-6 text-zinc-400 hover:text-zinc-900">
           <X size={24} />
         </button>
 
-        <h2 className="text-2xl font-bold mb-2">{isLogin ? 'Welcome Back' : 'Create Account'}</h2>
-        <p className="text-zinc-500 text-sm mb-8">{isLogin ? 'Login to report disasters and help your community.' : 'Join ReadyNow to contribute to community safety.'}</p>
+        <h2 className="text-xl md:text-2xl font-bold mb-2">{isLogin ? 'Welcome Back' : 'Create Account'}</h2>
+        <p className="text-zinc-500 text-xs md:text-sm mb-6 md:mb-8">{isLogin ? 'Login to report disasters and help your community.' : 'Join ReadyNow to contribute to community safety.'}</p>
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
@@ -298,10 +298,10 @@ const Dashboard = ({ onSelectLocation, onReport }: { onSelectLocation: () => voi
 
   return (
     <div className="space-y-8">
-      <section className="bg-zinc-900 rounded-3xl p-8 text-white relative overflow-hidden">
+      <section className="bg-zinc-900 rounded-3xl p-6 md:p-8 text-white relative overflow-hidden">
         <div className="relative z-10 max-w-2xl">
-          <h2 className="text-4xl font-bold tracking-tight mb-4">Stay Prepared, Stay Safe.</h2>
-          <p className="text-zinc-400 text-lg mb-8">
+          <h2 className="text-3xl md:text-4xl font-bold tracking-tight mb-4">Stay Prepared, Stay Safe.</h2>
+          <p className="text-zinc-400 text-base md:text-lg mb-8">
             Get real-time evacuation information, weather updates, and AI-powered guidance for your specific location in Quezon City.
           </p>
           <div className="flex flex-wrap gap-4">
@@ -319,8 +319,8 @@ const Dashboard = ({ onSelectLocation, onReport }: { onSelectLocation: () => voi
 
       <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
         <div className="lg:col-span-3 space-y-8">
-          <div className="bg-white rounded-3xl p-8 border border-zinc-100 shadow-sm h-full">
-            <h3 className="text-xl font-bold mb-6 flex items-center gap-2">
+          <div className="bg-white rounded-3xl p-6 md:p-8 border border-zinc-100 shadow-sm h-full">
+            <h3 className="text-lg md:text-xl font-bold mb-6 flex items-center gap-2">
               <CloudRain className="text-red-700" />
               Latest Disaster News
             </h3>
@@ -336,8 +336,8 @@ const Dashboard = ({ onSelectLocation, onReport }: { onSelectLocation: () => voi
           </div>
         </div>
 
-        <div className="bg-white rounded-3xl p-8 border border-zinc-100 shadow-sm h-fit">
-          <h3 className="text-xl font-bold mb-6 flex items-center gap-2">
+        <div className="bg-white rounded-3xl p-6 md:p-8 border border-zinc-100 shadow-sm h-fit">
+          <h3 className="text-lg md:text-xl font-bold mb-6 flex items-center gap-2">
             <AlertTriangle className="text-amber-500" />
             Community Reports
           </h3>
@@ -381,11 +381,11 @@ const Selection = ({ onComplete }: { onComplete: (district: string, barangay: st
   return (
     <div className="max-w-2xl mx-auto space-y-8">
       <div className="text-center">
-        <h2 className="text-3xl font-bold tracking-tight mb-2">Select Your Location</h2>
-        <p className="text-zinc-500">Choose your district and barangay to see evacuation maps.</p>
+        <h2 className="text-2xl md:text-3xl font-bold tracking-tight mb-2">Select Your Location</h2>
+        <p className="text-zinc-500 text-sm">Choose your district and barangay to see evacuation maps.</p>
       </div>
 
-      <div className="bg-white rounded-3xl p-8 border border-zinc-100 shadow-sm space-y-6">
+      <div className="bg-white rounded-3xl p-6 md:p-8 border border-zinc-100 shadow-sm space-y-6">
         <div>
           <label className="block text-sm font-semibold text-zinc-700 mb-2">District</label>
           <select 
@@ -483,8 +483,8 @@ const MapInfo = ({ district, barangay }: { district: string, barangay: string })
     <div className="space-y-8">
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
         <div>
-          <h2 className="text-3xl font-bold tracking-tight">{barangay}</h2>
-          <p className="text-zinc-500">{district}, Quezon City</p>
+          <h2 className="text-2xl md:text-3xl font-bold tracking-tight">{barangay}</h2>
+          <p className="text-zinc-500 text-sm md:text-base">{district}, Quezon City</p>
           {selectedFacility && (
             <button 
               onClick={() => setSelectedFacility(null)}
@@ -521,9 +521,9 @@ const MapInfo = ({ district, barangay }: { district: string, barangay: string })
             />
           </div>
 
-          <div className="bg-red-950 text-white rounded-3xl p-8 relative overflow-hidden">
+          <div className="bg-red-950 text-white rounded-3xl p-6 md:p-8 relative overflow-hidden">
             <div className="relative z-10">
-              <h3 className="text-xl font-bold mb-4 flex items-center gap-2">
+              <h3 className="text-lg md:text-xl font-bold mb-4 flex items-center gap-2">
                 <ShieldAlert className="text-red-400" />
                 AI Preparedness Guidance
               </h3>
@@ -641,12 +641,12 @@ const ReportDisaster = ({ user, onLoginRequired }: { user: User | null, onLoginR
   return (
     <div className="max-w-2xl mx-auto space-y-8">
       <div className="text-center">
-        <h2 className="text-3xl font-bold tracking-tight mb-2">Report a Disaster</h2>
-        <p className="text-zinc-500">Help the community by reporting emergencies in your area.</p>
+        <h2 className="text-2xl md:text-3xl font-bold tracking-tight mb-2">Report a Disaster</h2>
+        <p className="text-zinc-500 text-sm">Help the community by reporting emergencies in your area.</p>
       </div>
 
       {!user ? (
-        <div className="bg-white rounded-3xl p-12 border border-zinc-100 shadow-sm text-center space-y-6">
+        <div className="bg-white rounded-3xl p-8 md:p-12 border border-zinc-100 shadow-sm text-center space-y-6">
           <div className="w-16 h-16 bg-red-50 text-red-700 rounded-full flex items-center justify-center mx-auto">
             <AlertTriangle size={32} />
           </div>
@@ -662,7 +662,7 @@ const ReportDisaster = ({ user, onLoginRequired }: { user: User | null, onLoginR
           </button>
         </div>
       ) : (
-        <form onSubmit={handleSubmit} className="bg-white rounded-3xl p-8 border border-zinc-100 shadow-sm space-y-6">
+        <form onSubmit={handleSubmit} className="bg-white rounded-3xl p-6 md:p-8 border border-zinc-100 shadow-sm space-y-6">
           <div className="flex items-center gap-3 p-4 bg-zinc-50 rounded-2xl border border-zinc-100 mb-6">
             <div className="h-10 w-10 rounded-full bg-white flex items-center justify-center border border-zinc-200">
               <UserIcon size={20} className="text-zinc-400" />
@@ -730,27 +730,27 @@ const ReportDisaster = ({ user, onLoginRequired }: { user: User | null, onLoginR
 const About = () => (
   <div className="max-w-4xl mx-auto space-y-12">
     <div className="text-center">
-      <h2 className="text-4xl font-bold tracking-tight mb-4">About ReadyNow</h2>
-      <p className="text-zinc-500 text-lg">An AI-powered disaster readiness support system for Quezon City.</p>
+      <h2 className="text-3xl md:text-4xl font-bold tracking-tight mb-4">About ReadyNow</h2>
+      <p className="text-zinc-500 text-base md:text-lg">An AI-powered disaster readiness support system for Quezon City.</p>
     </div>
 
     <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-      <div className="bg-white rounded-3xl p-8 border border-zinc-100 shadow-sm">
-        <h3 className="text-xl font-bold mb-4">Project Overview</h3>
-        <p className="text-zinc-600 leading-relaxed">
+      <div className="bg-white rounded-3xl p-6 md:p-8 border border-zinc-100 shadow-sm">
+        <h3 className="text-lg md:text-xl font-bold mb-4">Project Overview</h3>
+        <p className="text-zinc-600 text-sm md:text-base leading-relaxed">
           ReadyNow helps residents prepare for disasters by providing evacuation information, weather updates, and AI-driven decision-support guidance. Our mission is to improve disaster awareness and preparedness through accessible location-based information.
         </p>
       </div>
-      <div className="bg-white rounded-3xl p-8 border border-zinc-100 shadow-sm">
-        <h3 className="text-xl font-bold mb-4">Our Purpose</h3>
-        <p className="text-zinc-600 leading-relaxed">
+      <div className="bg-white rounded-3xl p-6 md:p-8 border border-zinc-100 shadow-sm">
+        <h3 className="text-lg md:text-xl font-bold mb-4">Our Purpose</h3>
+        <p className="text-zinc-600 text-sm md:text-base leading-relaxed">
           In a city as large as Quezon City, localized information is key. ReadyNow bridges the gap between official data and resident needs, providing a centralized hub for critical safety information. We plan to add more cities but for now we only covered Quezon city since it is one of the most disaster-prone areas in the Philippines.
         </p>
       </div>
     </div>
 
-    <div className="bg-zinc-900 rounded-3xl p-8 text-white">
-      <h3 className="text-xl font-bold mb-8 text-center">Data Sources</h3>
+    <div className="bg-zinc-900 rounded-3xl p-6 md:p-8 text-white">
+      <h3 className="text-lg md:text-xl font-bold mb-8 text-center">Data Sources</h3>
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-8">
         {[
           { name: 'PAGASA', desc: 'Weather information and forecasts.' },
@@ -768,8 +768,8 @@ const About = () => (
       </div>
     </div>
 
-    <div className="bg-amber-50 border border-amber-100 rounded-3xl p-8">
-      <h3 className="text-lg font-bold text-amber-900 mb-2">Disclaimer</h3>
+    <div className="bg-amber-50 border border-amber-100 rounded-3xl p-6 md:p-8">
+      <h3 className="text-base md:text-lg font-bold text-amber-900 mb-2">Disclaimer</h3>
       <p className="text-amber-800 text-sm leading-relaxed">
         ReadyNow is a decision-support tool only and does not replace official government emergency services. Always prioritize instructions from local authorities and emergency responders.
       </p>
@@ -780,16 +780,16 @@ const About = () => (
 const HomeLanding = ({ onStart }: { onStart: () => void }) => (
   <div className="flex flex-col">
     <main className="flex-1">
-      <section className="py-20 px-6 max-w-7xl mx-auto text-center space-y-8">
+      <section className="py-12 md:py-20 px-6 max-w-7xl mx-auto text-center space-y-8">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
         >
-          <h2 className="text-5xl sm:text-6xl md:text-8xl font-bold tracking-tight text-zinc-900 leading-[0.9]">
+          <h2 className="text-4xl sm:text-6xl md:text-8xl font-bold tracking-tight text-zinc-900 leading-[0.9]">
             ReadyNow<span className="text-red-700">.</span>
           </h2>
-          <p className="text-xl md:text-2xl text-zinc-500 max-w-2xl mx-auto mt-6">
+          <p className="text-lg md:text-xl lg:text-2xl text-zinc-500 max-w-2xl mx-auto mt-6">
             Your AI-powered disaster readiness assistant for Quezon City. Stay informed, stay prepared, stay safe.
           </p>
         </motion.div>
