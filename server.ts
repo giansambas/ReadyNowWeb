@@ -181,34 +181,25 @@ app.post("/api/report", authenticate, (req: any, res) => {
 });
 
 // Development mode (Vite middleware)
-if (process.env.NODE_ENV !== "production") {
+const isProduction = process.env.NODE_ENV === "production";
 
+if (!isProduction) {
+  // Local development with Vite
   createViteServer({
     server: { middlewareMode: true },
     appType: "spa",
   }).then((vite) => {
-
     app.use(vite.middlewares);
 
     app.listen(PORT, "0.0.0.0", () => {
       console.log(`Dev server running on http://localhost:${PORT}`);
     });
-
   });
-
 } else {
-
-  app.use(express.static(path.join(process.cwd(), "dist")));
-
-  app.get("*", (req, res) => {
-    res.sendFile(path.join(process.cwd(), "dist/index.html"));
-  });
-
-  // 🔴 THIS WAS MISSING
+  // Production server (Render)
   app.listen(PORT, "0.0.0.0", () => {
-    console.log(`Production server running on port ${PORT}`);
+    console.log(`Production API running on port ${PORT}`);
   });
-
 }
 
 export default app;
